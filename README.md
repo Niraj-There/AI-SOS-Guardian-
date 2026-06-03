@@ -1,103 +1,106 @@
-# 🆘 SOS Guardian v3
+# AI SOS Guardian
 
-End-to-end emergency alert system — Flutter + FastAPI + PostgreSQL.
+An intelligent emergency alert system designed to provide rapid assistance. This project combines a Flutter-based mobile application with a powerful FastAPI backend, utilizing a PostgreSQL database for robust data management.
 
 ---
 
-## What's in this project
+## Features
+
+*   **Emergency Alerts:** Send SOS alerts to designated contacts with a single tap.
+*   **Real-time Location Tracking:** Share your location with guardians in real-time during an emergency.
+*   **Contact Management:** Easily add and manage trusted contacts to be notified.
+*   **History:** Review past SOS events.
+*   **Cross-Platform:** Built with Flutter for a consistent experience on Android.
+
+---
+
+## Technologies Used
+
+*   **Frontend:** Flutter
+*   **Backend:** FastAPI, Python
+*   **Database:** PostgreSQL, SQLAlchemy
+*   **Real-time:** WebSockets (via FastAPI)
+
+---
+
+## Project Structure
 
 ```
-sos_final/
-├── backend/               FastAPI server
-│   ├── main.py            All API endpoints
-│   ├── models.py          Database models
-│   ├── schemas.py         Request/response shapes
-│   ├── database.py        SQLAlchemy + PostgreSQL
-│   ├── setup_db.py        One-click DB setup script
-│   ├── latency_test.py    Academic benchmark tool
-│   ├── requirements.txt
-│   └── .env               DB URL + host/port config
-│
-└── mobile/                Flutter Android app
+.
+├── backend/
+│   ├── main.py         # API Endpoints
+│   ├── models.py       # Database Models
+│   ├── schemas.py      # Pydantic Schemas
+│   ├── database.py     # Database Connection
+│   └── ...
+└── mobile/
     ├── lib/
-    │   ├── main.dart
-    │   ├── utils/          constants.dart, theme.dart
-    │   ├── models/         contact.dart, sos_record.dart
-    │   ├── services/       api.dart, notif_svc.dart, sms_svc.dart,
-    │   │                   location_svc.dart, device_svc.dart
-    │   ├── providers/      app_state.dart, crash_notifier.dart
-    │   └── screens/        home, guardian, contacts, history, settings
-    └── android/
-        ├── app/
-        │   ├── build.gradle
-        │   └── src/main/
-        │       ├── AndroidManifest.xml
-        │       ├── kotlin/.../MainActivity.kt
-        │       └── res/              icons, splash, styles
-        ├── build.gradle
-        ├── settings.gradle
-        └── gradle.properties
+    │   ├── main.dart       # App Entry Point
+    │   ├── services/     # API, Location, SMS services
+    │   ├── screens/      # UI Screens
+    │   └── ...
+    └── ...
 ```
 
 ---
 
-## ① Backend Setup (your PC)
+## Getting Started
 
-### Prerequisites
-- Python 3.10+
-- PostgreSQL installed and running
+### 1. Backend Setup
 
-### Step 1 — Install dependencies
+**Prerequisites:**
+*   Python 3.10+
+*   PostgreSQL
 
-```bash
-cd backend
-pip install -r requirements.txt
-```
+**Instructions:**
 
-### Step 2 — Create database & tables (run once)
+1.  **Navigate to the backend directory:**
+    ```bash
+    cd backend
+    ```
 
-```bash
-python setup_db.py --user postgres --password YOUR_POSTGRES_PASSWORD
-```
+2.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-This creates the `sos_guardian` database, writes `.env`, and creates all tables.
+3.  **Set up the database (run once):**
+    Replace `YOUR_POSTGRES_PASSWORD` with your actual PostgreSQL password.
+    ```bash
+    python setup_db.py --user postgres --password YOUR_POSTGRES_PASSWORD
+    ```
 
-**If your Postgres uses a different password:**
-```bash
-python setup_db.py --user postgres --password mypassword --host localhost --port 5432
-```
-
-### Step 3 — Start the server
-
-```bash
-python main.py
-```
-
-Or with auto-reload for development:
-```bash
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-**API docs (auto-generated):** `http://localhost:8000/docs`
-
-**Verify it's working:**
-```bash
-curl http://localhost:8000/
-# Expected: {"status":"ok","service":"SOS Guardian","version":"3.0.0"}
-```
+4.  **Start the server:**
+    For development with auto-reload:
+    ```bash
+    uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    ```
+    You can access the API documentation at `http://localhost:8000/docs`.
 
 ---
 
-## ② Flutter App Setup (your phone)
+### 2. Flutter App Setup
 
-### Prerequisites
-- Flutter 3.x installed
-- Android phone with USB Debugging enabled
-- Phone on the **same Wi-Fi** as your PC
+**Prerequisites:**
+*   Flutter 3.x
+*   An Android device with USB Debugging enabled.
+*   Your phone and PC must be on the same Wi-Fi network.
 
-### Step 1 — Set your PC's local IP
+**Instructions:**
 
-Edit `mobile/lib/utils/constants.dart`, line 5:
+1.  **Configure the API endpoint:**
+    Open `mobile/lib/utils/constants.dart` and update the `API_URL` with your PC's local IP address.
+
+2.  **Navigate to the mobile directory:**
+    ```bash
+    cd mobile
+    ```
+
+3.  **Run the app:**
+    ```bash
+    flutter run
+    ```
+
 
 ```dart
 static const String baseUrl = 'http://192.168.1.5:8000';
